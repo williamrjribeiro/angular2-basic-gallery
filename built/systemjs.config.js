@@ -5,9 +5,9 @@
 (function(global) {
     // map tells the System loader where to look for things
     var map = {
-        'app': './built/app', // 'dist',
-        '@angular': '../node_modules/@angular',
-        'rxjs': '../node_modules/rxjs'
+        'app': './app', // 'dist',
+        '@angular': './libs/@angular',
+        'rxjs': './libs/rxjs'
     };
     // packages tells the System loader how to load when no filename and/or no extension
     // There is no runtime harm in listing packages that we don't need as they will only be loaded when requested.
@@ -41,7 +41,7 @@
     // Bundled (~40 requests):
     function packUmd(pkgName) {
         packages['@angular/' + pkgName] = {
-            main: '/bundles/' + pkgName + '.umd.js',
+            main: 'bundles/' + pkgName + '.umd.min.js',
             defaultExtension: 'js'
         };
     }
