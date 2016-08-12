@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import './rxjs-extensions';
 
 @Component({
     selector: 'gallery-app',
@@ -19,10 +21,14 @@ import { Component } from '@angular/core';
     `
 })
 // Root Component. Deals with navigation/routing
-export class AppComponent {
+export class AppComponent implements OnInit {
     title = 'Angular2 Gallery';
 
     constructor(){
         console.log("[AppComponent.constructor]");
+    }
+
+    ngOnInit() {
+        console.log("[AppComponent.ngOnInit]");
     }
 }
