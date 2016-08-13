@@ -14,7 +14,7 @@ import './rxjs-extensions';
               <album-list></album-list>
             </div>
             <div class="col-md-8" >
-              <album></album>
+              <router-outlet></router-outlet>
             </div>
           </div>
         </div>

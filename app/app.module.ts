@@ -4,32 +4,34 @@ import { FormsModule } from '@angular/forms';
 
 import { HttpModule } from '@angular/http';
 
-import { AlbumService } from './album.service';
+import { GenericService } from './generic.service';
 
 import { AlbumListComponent } from './album-list.component';
 import { MediaGridComponent } from './media-grid.component';
 import { UserInfoComponent } from './user-info.component';
 import { AlbumComponent } from './album.component';
+import { AboutComponent } from './about.component';
 import { AppComponent } from './app.component';
 
-//import { routing } from './app.routing';
+import { routing } from './app.routing';
 
 @NgModule({
   imports: [
-     BrowserModule
-    ,FormsModule
-    ,HttpModule
-    //,routing
+      BrowserModule
+    , FormsModule
+    , HttpModule
+    , routing
   ],
   declarations: [
-     AlbumListComponent
-    ,MediaGridComponent
-    ,UserInfoComponent
-    ,AlbumComponent
-    ,AppComponent
+      AlbumListComponent
+    , MediaGridComponent
+    , UserInfoComponent
+    , AlbumComponent
+    , AboutComponent
+    , AppComponent
   ],
   providers: [
-    AlbumService
+    GenericService
   ],
   bootstrap: [AppComponent]
 })
