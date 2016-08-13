@@ -39,7 +39,9 @@ export class AlbumListComponent implements OnInit {
         console.log("[AlbumListComponent.ngOnInit]");
         this.service.list<Album>(Album)
             .subscribe(
-          );
+                (albums:Album[]) => {this.albums = albums},
+                error => console.error("[AlbumListComponent.ngOnInit] error:", error)
+            );
     }
 
     onSelect(album: Album, event: any) {

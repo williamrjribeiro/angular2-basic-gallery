@@ -19,7 +19,7 @@ export class GenericService {
         console.log("[GenericService.list]");
         return this.http.get( this.url + this.resolveServicePath(klass) )
             //.map(this.extractData)
-            .map( (res:Response) => { return res.json() as T[] })
+            .map( (res:Response) => {return res.json() as T[]} )
             .catch(this.handleError);
     }
 
@@ -27,7 +27,7 @@ export class GenericService {
         console.log("[GenericService.getGeneric] id:", id);
         return this.http.get( this.url + this.resolveServicePath(klass) + "/" + id)
             //.map(this.extractData)
-            .map( (res:Response) => { return res.json() as T })
+            .map( (res:Response) => { return res.json() as T; })
             .catch(this.handleError);
     }
 
