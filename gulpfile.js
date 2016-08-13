@@ -63,7 +63,7 @@ gulp.task('webserver', function() {
     gulp.src(appSrc)
         .pipe(webserver({
             livereload: true,
-            open: true
+            open: false
         }));
 });
 

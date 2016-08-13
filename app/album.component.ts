@@ -94,7 +94,7 @@ export class AlbumComponent implements OnInit {
         console.log("[AlbumComponent.getPhotos] albumId:", albumId);
         this.service.list<Photo>(Photo)
             .subscribe(
-            photos => this.photos = photos,
+            this.onPhotosSuccess,
             error => console.error('[AlbumListComponent.getPhotos] error:', error)
             );
     }
@@ -113,6 +113,11 @@ export class AlbumComponent implements OnInit {
     onUserSuccess = (user: User) => {
         console.log("[AlbumComponent.onUserSuccess] user:", user);
         this.user = user;
+    };
+
+    onPhotosSuccess = (photos: Photo[]) => {
+        console.log("[AlbumComponent.onPhotosSuccess] photos.length:", photos.length);
+        this.photos = photos;
     };
 
     ngOnDestroy() {

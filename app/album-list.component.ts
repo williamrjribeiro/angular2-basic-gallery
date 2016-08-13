@@ -30,7 +30,7 @@ export class AlbumListComponent implements OnInit {
 
     constructor(
           private service: GenericService
-        , private router: Router,
+        , private router: Router
     ) {
         console.log("[AlbumListComponent.constructor]");
     }
@@ -39,9 +39,7 @@ export class AlbumListComponent implements OnInit {
         console.log("[AlbumListComponent.ngOnInit]");
         this.service.list<Album>(Album)
             .subscribe(
-            albums => this.albums = albums,
-            error => console.error('[AlbumListComponent.ngOnInit] error:', error)
-            );
+          );
     }
 
     onSelect(album: Album, event: any) {

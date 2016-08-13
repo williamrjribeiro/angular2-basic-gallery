@@ -15,23 +15,25 @@ export class GenericService {
         console.log("[GenericService.constructor]");
     }
 
-    list<T>(modelKlass: T): Observable<T[]> {
-        console.log("[GenericService.list] modelKlass:", typeof modelKlass);
-        return this.http.get(this.url + this.resolveServicePath(modelKlass))
-            .map(this.extractData)
+    list<T>( klass:Function ): Observable<T[]> {
+        console.log("[GenericService.list]");
+        return this.http.get( this.url + this.resolveServicePath(klass) )
+            //.map(this.extractData)
+            .map( (res:Response) => { return res.json() as T[] })
             .catch(this.handleError);
     }
 
-    get<T>(id: number, modelKlass: T): Observable<T> {
+    get<T>(id: number, klass:Function): Observable<T> {
         console.log("[GenericService.getGeneric] id:", id);
-        return this.http.get(this.url + this.resolveServicePath(modelKlass) + "/" + id)
-            .map(this.extractData)
+        return this.http.get( this.url + this.resolveServicePath(klass) + "/" + id)
+            //.map(this.extractData)
+            .map( (res:Response) => { return res.json() as T })
             .catch(this.handleError);
     }
 
-    resolveServicePath(type: any): string {
-        console.log("[GenericService.resolveServicePath] type:", typeof type);
-        switch (type) {
+    resolveServicePath(klass: Function): string {
+        console.log("[GenericService.resolveServicePath] klass:", klass.name);
+        switch (klass) {
             case Album: return "albums";
             case Photo: return "photos";
             case User: return "users";

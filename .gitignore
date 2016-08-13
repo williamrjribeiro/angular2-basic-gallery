@@ -2,3 +2,4 @@ node_modules
 built/app
 built/libs
 typings
+npm-debug.log
