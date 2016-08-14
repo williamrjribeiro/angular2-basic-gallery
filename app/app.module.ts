@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { JsonPlaceHolderService } from './jsonplaceholder.service';
-import { AppModel } from './model/app.model';
+import { AppModel } from './app.model';
 import { AlbumListComponent } from './album-list.component';
 import { MediaGridComponent } from './media-grid.component';
 import { UserInfoComponent } from './user-info.component';

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { Photo } from './photo.model';
+import { Photo } from './app.model';
 
 @Component({
     selector: 'media-grid',

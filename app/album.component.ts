@@ -1,8 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Album } from './album.model';
-import { User } from './user.model';
-import { Photo } from './photo.model';
+import { Album, User, Photo } from './app.model';
 
 /**
  * It's responsible displaying data about an Album mainly User info and Photos.

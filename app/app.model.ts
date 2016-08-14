@@ -4,12 +4,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { Subject }    from 'rxjs/Subject';
 
-import { Album } from '../album.model';
-import { User } from '../user.model';
-import { Photo } from '../photo.model';
-
 @Injectable()
-export class AppModel {
+class AppModel {
 
     // Observable Albums source
     private _albumsSubject:Subject<Album> = new Subject<Album>();
@@ -63,3 +59,49 @@ export class AppModel {
         return this._currentUser;
     }
 }
+
+class Geo {
+    lat: number;
+    lng: number;
+};
+
+class Company {
+    catchPhrase: string;
+    name: string;
+    bs: string;
+};
+
+class Adress {
+    zipcode: string;
+    street: string;
+    suite: string;
+    city: string;
+    geo: Geo;
+};
+
+class User {
+    username: string;
+    address: Adress;
+    website: string;
+    company: Company;
+    email: string;
+    phone: string;
+    name: string;
+    id: number;
+};
+
+class Photo {
+  id:     number;
+  albumId: number;
+  title:  string;
+  url:  string;
+  thumbnailUrl:  string;
+};
+
+class Album {
+  id:     number;
+  userId: number;
+  title:  string;
+}
+
+export { Geo, Company, Adress, User, Photo, Album, AppModel };

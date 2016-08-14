@@ -3,10 +3,7 @@ import './rxjs-extensions';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
-import { Album } from './album.model';
-import { User } from './user.model';
-import { Photo } from './photo.model';
-import { AppModel } from './model/app.model';
+import { AppModel, Album, User, Photo } from './app.model';
 import { AppRouter } from './app.routing';
 import { JsonPlaceHolderService } from './jsonplaceholder.service';
 
@@ -29,6 +26,7 @@ import { JsonPlaceHolderService } from './jsonplaceholder.service';
             </div>
             <div class="col-md-8" >
               <router-outlet></router-outlet>
+              <album></album>
             </div>
           </div>
         </div>

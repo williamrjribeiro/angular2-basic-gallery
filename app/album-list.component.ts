@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { Album } from './album.model';
+import { Album } from './app.model';
 
 @Component({
     selector: 'album-list',

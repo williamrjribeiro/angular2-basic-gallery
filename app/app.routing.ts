@@ -3,10 +3,7 @@ import { ActivatedRoute, Params, Router, Routes, RouterModule } from '@angular/r
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { Album } from './album.model';
-import { User } from './user.model';
-import { Photo } from './photo.model';
-import { AppModel } from './model/app.model';
+import { AppModel, Album } from './app.model';
 import { AlbumComponent } from './album.component';
 import { AboutComponent } from './about.component';
 import { PhotoComponent } from './photo.component';

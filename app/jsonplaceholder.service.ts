@@ -3,9 +3,7 @@ import { Http, Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 
-import { Album } from './album.model';
-import { User } from './user.model';
-import { Photo } from './photo.model';
+import { Album, User, Photo } from './app.model';
 
 /**
  * Responsible for communicating with http://jsonplaceholder.typicode.com/
