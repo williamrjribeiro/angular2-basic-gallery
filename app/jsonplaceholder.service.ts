@@ -69,19 +69,20 @@ export class JsonPlaceHolderService {
         }
     }
 
-    private handleError( error:any ) {
+    private handleError( error:Response ) {
+        console.error("[JsonPlaceHolderService.handleError] error:", error);
+
         // In a real world app, we might use a remote logging infrastructure
         // We'd also dig deeper into the error to get a better message
-        let errMsg: string;
+        let errMsg: string = "";
+
+        if ( error.status )
+            errMsg = `${error.status} - ${error.statusText}`
 
         if ( error.message )
-            errMsg = error.message;
-        else if ( error.status )
-            errMsg = `${error.status} - ${error.statusText}`
+            errMsg += ' : '+ error.message;
         else
-            errMsg = 'Server error';
-
-        console.log("[JsonPlaceHolderService.handleError] errMsg:", errMsg);
+            errMsg += ' Server error';
 
         return Observable.throw( errMsg );
     }

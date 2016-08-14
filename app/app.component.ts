@@ -19,7 +19,14 @@ import { JsonPlaceHolderService } from './jsonplaceholder.service';
     // The router displays each component immediately below the <router-outlet> as we navigate through the application
     template: `
         <div class="container">
-          <h1>{{_title}}</h1>
+          <h1>Angular2 Gallery</h1>
+          <div *ngIf="_errorMsg" class="row">
+              <div class="col-sm-12">
+                  <div class="alert alert-danger" role="alert">
+                      <strong>Oh snap!</strong> {{_errorMsg}}
+                  </div>
+              </div>
+          </div>
           <div class="row">
             <div class="col-md-4">
               <album-list [useAppModel]="false"
@@ -36,7 +43,7 @@ import { JsonPlaceHolderService } from './jsonplaceholder.service';
 })
 export class AppComponent implements OnInit {
 
-    private _title = 'Angular2 Gallery';
+    private _errorMsg:string;
 
     /**
      * List of Albums to be displayed by AlbumListComponent.
@@ -44,8 +51,6 @@ export class AppComponent implements OnInit {
      * @type {Album[]}
      */
     private _albums:Album[];
-
-    private photos:Photo[];
 
     /**
      * It's the main visual component. It's two main children are: AlbumListComponent & AlbumComponent.
@@ -71,7 +76,7 @@ export class AppComponent implements OnInit {
         this.service.list<Album>( Album )
             .subscribe(
                 this._onAlbums,
-                error => console.error("[AppComponent.ngOnInit] error:", error)
+                this._onError
             );
     }
 
@@ -109,12 +114,10 @@ export class AppComponent implements OnInit {
         // Fetch an User if none is available or if current User.id is different from current Album.userId
         if (!user || (currentAlbum && currentAlbum.userId !== id)) {
 
-            this.photos = null;
-
             this.service.get<User>( id, User )
                 .subscribe(
 				            ( user:User ) => this.appModel.setCurrentUser( user ),
-				            error => console.error('[AppComponent.getUser] error:', error)
+				            this._onError
                 );
         }
     }
@@ -124,7 +127,12 @@ export class AppComponent implements OnInit {
         this.service.list<Photo>( Photo, `?albumId=${albumId}` )
             .subscribe(
                 ( photos:Photo[] ) => this.appModel.setPhotos( photos ),
-                error => console.error('[AlbumListComponent.getPhotos] error:', error)
+                this._onError
             );
     }
+
+    private _onError = ( error:any ) => {
+        console.error("[AppComponent.onError] error:", error);
+        this._errorMsg = error;
+    };
 }
