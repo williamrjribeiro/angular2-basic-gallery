@@ -7,7 +7,7 @@ import { AppModel, Photo } from './app.model';
 @Component({
     selector: 'media-grid',
     template: `
-    <div class="container">
+    <div class="container scroll-list">
       <h6 *ngIf="!photos">fetching Album Photos...</h6>
       <div *ngIf="photos" class="row">
         <div *ngFor="let photo of photos"

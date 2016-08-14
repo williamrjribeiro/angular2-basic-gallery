@@ -9,7 +9,7 @@ import { AppModel, Album } from './app.model';
     template: `
       <h4>{{title}}</h4>
       <h6 *ngIf="!albums">fetching Album list...</h6>
-      <nav class="nav nav-pills nav-stacked">
+      <nav class="scroll-list nav nav-pills nav-stacked">
           <a *ngFor="let album of albums;"
              role="presentation"
              class="nav-link"
