@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { HttpModule } from '@angular/http';
 
-import { GenericService } from './generic.service';
+import { JsonPlaceHolderService } from './jsonplaceholder.service';
 
 import { AlbumListComponent } from './album-list.component';
 import { MediaGridComponent } from './media-grid.component';
 import { UserInfoComponent } from './user-info.component';
+import { PhotoComponent } from './photo.component';
 import { AlbumComponent } from './album.component';
 import { AboutComponent } from './about.component';
 import { AppComponent } from './app.component';
@@ -26,14 +27,13 @@ import { routing } from './app.routing';
       AlbumListComponent
     , MediaGridComponent
     , UserInfoComponent
+    , PhotoComponent
     , AlbumComponent
     , AboutComponent
     , AppComponent
   ],
-  providers: [
-    GenericService
-  ],
-  bootstrap: [AppComponent]
+  providers: [ JsonPlaceHolderService ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule {
     constructor(){

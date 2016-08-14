@@ -1,0 +1,11 @@
+<div class="container">
+    <h1>{{title}}</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <album-list [albums]="albums" (selected)="onAlbumSelected($event)"></album-list>
+        </div>
+        <div class="col-md-8">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

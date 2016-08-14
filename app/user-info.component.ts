@@ -7,7 +7,7 @@ import { User } from './user.model';
     template: `
       <div class="container">
         <h6 *ngIf="!user">fetching User details...</h6>
-        <h2 *ngIf="user" title="a.k.a. {{user.name}}" >by <em>{{user.username}}</em></h2>
+        <h2 *ngIf="user" title="a.k.a. {{user.name}} - id: {{user.id}}" >by <em>{{user.username}}</em></h2>
       </div>
     `
 })

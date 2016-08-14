@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { Album } from './album.model';
-import { GenericService } from './generic.service';
 
 @Component({
     selector: 'album-list',
     template: `
-      <h2>{{title}}</h2>
+      <h4>{{title}}</h4>
       <h6 *ngIf="!albums">fetching Album list...</h6>
-      <nav class="nav nav-pills nav-stacked" (click)="onNavClick($event)">
+      <nav class="nav nav-pills nav-stacked">
           <a *ngFor="let album of albums;"
              role="presentation"
              class="nav-link"
@@ -24,47 +22,32 @@ import { GenericService } from './generic.service';
 })
 export class AlbumListComponent implements OnInit {
 
-    title = 'Album List';
-    albums: Album[];
-    selectedAlbum: Album;
+    @Input() albums: Album[];
+    @Output() selected:EventEmitter<Album> = new EventEmitter<Album>();
 
-    constructor(
-          private service: GenericService
-        , private router: Router
-    ) {
+    private title = 'Albums';
+    private selectedAlbum: Album;
+
+    constructor() {
         console.log("[AlbumListComponent.constructor]");
     }
 
     ngOnInit() {
         console.log("[AlbumListComponent.ngOnInit]");
-        this.service.list<Album>(Album)
-            .subscribe(
-                (albums:Album[]) => {this.albums = albums},
-                error => console.error("[AlbumListComponent.ngOnInit] error:", error)
-            );
     }
 
     onSelect(album: Album, event: any) {
         console.log("[AlbumListComponent.onSelect] hero.name:", album.title);
+
+        // Don't allow link click to navigate
         event.preventDefault();
-        if (this.selectedAlbum == album)
+
+        if ( this.selectedAlbum == album )
             this.selectedAlbum = null;
         else
             this.selectedAlbum = album;
 
-        this.navigate();
-    }
-
-    onNavClick(event: any) {
-        //console.log("[AlbumListComponent.onNavClick] event:", typeof event);
-        event.preventDefault();
-    }
-
-    navigate() {
-        console.log("[AlbumListComponent.navigate] selectedAlbum:", this.selectedAlbum);
-        if (this.selectedAlbum)
-            this.router.navigate(['/album', this.selectedAlbum.id]);
-        else
-            this.router.navigate(['']);
+        //this.navigate();
+        this.selected.emit( this.selectedAlbum );
     }
 }
