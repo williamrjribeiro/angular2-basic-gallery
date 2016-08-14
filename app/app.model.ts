@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { Subject }    from 'rxjs/Subject';
 
@@ -8,11 +7,12 @@ import { Subject }    from 'rxjs/Subject';
 class AppModel {
 
     // Observable Albums source
-    private _albumsSubject:Subject<Album> = new Subject<Album>();
-    albums$:Observable<Album> = this._albumsSubject.asObservable();
+    private _albumsSubject:Subject<Album[]> = new Subject<Album[]>();
+    // Observable Albums Stream
+    albums$:Observable<Album[]> = this._albumsSubject.asObservable();
 
-    private _photosSubject:Subject<Photo> = new Subject<Photo>();
-    photos$:Observable<Photo> = this._photosSubject.asObservable();
+    private _photosSubject:Subject<Photo[]> = new Subject<Photo[]>();
+    photos$:Observable<Photo[]> = this._photosSubject.asObservable();
 
     private _currentAlbum:Album;
     private _currentAlbumSubject:Subject<Album> = new Subject<Album>();
@@ -24,13 +24,17 @@ class AppModel {
     currentUser$:Observable<User>  = this._currentUserSubject.asObservable();
 
     private _currentPhoto:Photo;
+    private _currentPhotoSubject:Subject<Photo> = new Subject<Photo>();
+    currentPhoto$:Observable<Photo>  = this._currentPhotoSubject.asObservable();
 
     setAlbums( albums:Album[] ) {
         console.log("[AppModel.setAlbums] albums:", albums.length);
+        this._albumsSubject.next( albums );
     }
 
     setPhotos( photos:Photo[] ) {
         console.log("[AppModel.setPhotos] photos:", photos.length);
+        this._photosSubject.next( photos );
     }
 
     setCurrentAlbum( album:Album ) {
@@ -57,6 +61,10 @@ class AppModel {
 
     currentUser():User {
         return this._currentUser;
+    }
+
+    currentPhoto():Photo {
+        return this._currentPhoto;
     }
 }
 

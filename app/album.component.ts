@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 import { Album, User, Photo } from './app.model';
 
@@ -11,23 +11,19 @@ import { Album, User, Photo } from './app.model';
     selector: 'album',
     template: `
       <div class="container">
-         <h2 *ngIf="album" title=" Album id: {{album.id}}">{{title}}: <em>{{album.title}}</em></h2>
+         <h2 *ngIf="album" title=" Album id: {{album.id}}">Album: <em>{{album.title}}</em></h2>
          <div class="row">
-           <user-info [user]="user"></user-info>
+           <user-info [useAppModel]="true"></user-info>
          </div>
          <div class="row">
-           <media-grid [photos]="photos" (selected)="onPhotoSelected($event)"></media-grid>
+           <media-grid [useAppModel]="true"
+                       (selected)="onPhotoSelected($event)">
+           </media-grid>
          </div>
       </div>
     `
 })
-export class AlbumComponent implements OnInit {
-
-    @Input() user: User;
-    @Input() album: Album;
-    @Input() photos: Photo[];
-
-    private title = 'Album';
+export class AlbumComponent implements OnInit, OnDestroy  {
 
     constructor() {
         console.log("[AlbumComponent.constructor]");
@@ -38,9 +34,11 @@ export class AlbumComponent implements OnInit {
         console.log("[AlbumComponent.ngOnInit]");
     }
 
+    ngOnDestroy() {
+        console.log("[AlbumComponent.ngOnDestroy]");
+    }
+
     onPhotoSelected( photo:Photo ) {
         console.log("[AlbumComponent.onPhotoSelected] photo:", photo);
     }
-
-
 }

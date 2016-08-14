@@ -1,6 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
-import { User } from './app.model';
+import { Subscription } from 'rxjs/Subscription';
+
+import { AppModel, User } from './app.model';
 
 @Component({
     selector: 'user-info',
@@ -11,15 +13,32 @@ import { User } from './app.model';
       </div>
     `
 })
-export class UserInfoComponent implements OnInit {
-    title = 'User Info';
+export class UserInfoComponent implements OnInit, OnDestroy {
+
+    private _userSub:Subscription;
+
+    @Input() useAppModel:boolean;
     @Input() user:User;
 
-    constructor(){
+    constructor( private appModel:AppModel ){
         console.log("[UserInfoComponent.constructor]");
     }
 
     ngOnInit() {
-        console.log("[UserInfoComponent.ngOnInit]");
+        console.log("[UserInfoComponent.ngOnInit] useAppModel:", this.useAppModel)
+        if( this.useAppModel ){
+            this._userSub = this.appModel
+                                .currentUser$
+                                .subscribe(
+                                    ( user:User ) => this.user = user
+                                );
+        }
+    }
+
+    ngOnDestroy() {
+        console.log("[UserInfoComponent.ngOnDestroy]");
+        this.user = null;
+        if( this._userSub )
+            this._userSub.unsubscribe();
     }
 }

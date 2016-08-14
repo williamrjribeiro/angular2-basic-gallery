@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { Photo } from './app.model';
+import { AppModel, Photo } from './app.model';
 
 @Component({
     selector: 'media-grid',
@@ -10,7 +10,6 @@ import { Photo } from './app.model';
     <div class="container">
       <h6 *ngIf="!photos">fetching Album Photos...</h6>
       <div *ngIf="photos" class="row">
-
         <div *ngFor="let photo of photos"
              role="presentation"
              class="col-lg-3 col-md-4 col-xs-6 thumb">
@@ -28,22 +27,39 @@ import { Photo } from './app.model';
     </div>
     `
 })
-export class MediaGridComponent implements OnInit {
-    @Input()  photos:Photo[];
+export class MediaGridComponent implements OnInit, OnDestroy {
+
+    @Input()  useAppModel:boolean;
+    photos:Photo[];
     @Output() selected:EventEmitter<Photo> = new EventEmitter<Photo>();
 
-    constructor(){
+    private _photosSub:Subscription;
+
+    constructor( private appModel:AppModel ){
         console.log("[MediaGridComponent.constructor]");
     }
 
     ngOnInit() {
-        console.log("[MediaGridComponent.ngOnInit]");
+        console.log("[MediaGridComponent.ngOnInit] useAppModel:", this.useAppModel);
+        if( this.useAppModel ){
+            this._photosSub = this.appModel
+                                  .photos$
+                                  .subscribe(
+                                      ( photos:Photo[] ) => this.photos = photos
+                                  );
+        }
     }
 
     onSelect(photo:Photo) {
         console.log("[MediaGridComponent.onSelect] photo.title:", photo.title);
-
         // Dispatch/Emit the selected event/message so other parts of UI can update (AlbumComponent)
         this.selected.emit(photo);
+    }
+
+    ngOnDestroy() {
+        console.log("[MediaGridComponent.ngOnDestroy]");
+        this.photos = null;
+        if( this._photosSub )
+            this._photosSub.unsubscribe();
     }
 }

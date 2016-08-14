@@ -19,14 +19,16 @@ import { JsonPlaceHolderService } from './jsonplaceholder.service';
     // The router displays each component immediately below the <router-outlet> as we navigate through the application
     template: `
         <div class="container">
-          <h1>{{title}}</h1>
+          <h1>{{_title}}</h1>
           <div class="row">
             <div class="col-md-4">
-              <album-list [albums]="albums" (selected)="onAlbumSelected($event)"></album-list>
+              <album-list [useAppModel]="false"
+                          [albums]="_albums"
+                          (selected)="onAlbumSelected($event)">
+              </album-list>
             </div>
             <div class="col-md-8" >
               <router-outlet></router-outlet>
-              <album></album>
             </div>
           </div>
         </div>
@@ -34,19 +36,16 @@ import { JsonPlaceHolderService } from './jsonplaceholder.service';
 })
 export class AppComponent implements OnInit {
 
-    private title = 'Angular2 Gallery';
+    private _title = 'Angular2 Gallery';
 
     /**
      * List of Albums to be displayed by AlbumListComponent.
      * The data is retrieved by JsonPlaceHolderService. It could have come from anywhere else.
      * @type {Album[]}
      */
-    private albums:Album[];
-
-    private album:Album;
+    private _albums:Album[];
 
     private photos:Photo[];
-
 
     /**
      * It's the main visual component. It's two main children are: AlbumListComponent & AlbumComponent.
@@ -71,12 +70,15 @@ export class AppComponent implements OnInit {
         // Get the list of Albums from the web
         this.service.list<Album>( Album )
             .subscribe(
-                ( albums:Album[] ) => {
-                    this.albums = albums;
-                    this.appModel.setAlbums( albums );
-                },
+                this._onAlbums,
                 error => console.error("[AppComponent.ngOnInit] error:", error)
             );
+    }
+
+    _onAlbums = ( albums:Album[] ) => {
+        console.log("[AppComponent._onAlbums] albums.length:", albums.length);
+        this._albums = albums;
+        this.appModel.setAlbums( albums );
     }
 
     /**
@@ -86,8 +88,14 @@ export class AppComponent implements OnInit {
     onAlbumSelected( album:Album ) {
         console.log("[AppComponent.onAlbumSelected] album:", album);
 
-        this.getUser( album.userId );
-        this.getPhotos( album.id );
+        if( album ){
+            this.getUser( album.userId );
+            this.getPhotos( album.id );
+        }
+        else {
+            this.appModel.setCurrentAlbum( null );
+            this.appModel.setCurrentUser( null );
+        }
 
         this.appModel.setCurrentAlbum( album );
     }
@@ -95,7 +103,7 @@ export class AppComponent implements OnInit {
     getUser( id:number ) {
         console.log("[AppComponent.getUser] id:", id);
 
-        let user:User = this.appModel.getUser(id);
+        let user:User = this.appModel.getUser( id );
         let currentAlbum:Album = this.appModel.currentAlbum();
 
         // Fetch an User if none is available or if current User.id is different from current Album.userId
@@ -105,7 +113,7 @@ export class AppComponent implements OnInit {
 
             this.service.get<User>( id, User )
                 .subscribe(
-				            (user:User) => this.appModel.setCurrentUser(user),
+				            ( user:User ) => this.appModel.setCurrentUser( user ),
 				            error => console.error('[AppComponent.getUser] error:', error)
                 );
         }
@@ -115,7 +123,7 @@ export class AppComponent implements OnInit {
         console.log("[AppComponent.getPhotos] albumId:", albumId);
         this.service.list<Photo>( Photo, `?albumId=${albumId}` )
             .subscribe(
-                (photos:Photo[]) => this.appModel.setPhotos(photos),
+                ( photos:Photo[] ) => this.appModel.setPhotos( photos ),
                 error => console.error('[AlbumListComponent.getPhotos] error:', error)
             );
     }

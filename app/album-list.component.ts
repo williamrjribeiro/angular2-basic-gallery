@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
 
-import { Album } from './app.model';
+import { Subscription } from 'rxjs/Subscription';
+
+import { AppModel, Album } from './app.model';
 
 @Component({
     selector: 'album-list',
@@ -20,20 +22,35 @@ import { Album } from './app.model';
       </nav>
     `
 })
-export class AlbumListComponent implements OnInit {
+export class AlbumListComponent implements OnInit, OnDestroy {
 
+    @Input() useAppModel:boolean;
     @Input() albums: Album[];
     @Output() selected:EventEmitter<Album> = new EventEmitter<Album>();
 
     private title = 'Albums';
     private selectedAlbum: Album;
+    private _albumsSub:Subscription;
 
-    constructor() {
+    constructor( private appModel:AppModel ) {
         console.log("[AlbumListComponent.constructor]");
     }
 
     ngOnInit() {
-        console.log("[AlbumListComponent.ngOnInit]");
+        console.log("[AlbumListComponent.ngOnInit] useAppModel:", this.useAppModel);
+        if( this.useAppModel ){
+            this._albumsSub = this.appModel
+                                  .albums$.subscribe(
+                                      ( albums:Album[] ) => this.albums = albums
+                                  );
+        }
+    }
+
+    ngOnDestroy() {
+        console.log("[AlbumListComponent.ngOnDestroy]");
+        this.albums = null;
+        if( this._albumsSub )
+            this._albumsSub.unsubscribe();
     }
 
     onSelect(album: Album, event: any) {

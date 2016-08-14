@@ -38,7 +38,7 @@ export const routing = RouterModule.forRoot(appRoutes);
 @Injectable()
 export class AppRouter {
 
-    private routeParamsSub:Subscription;
+    private _albumSub:Subscription;
 
     constructor( private appModel:AppModel
                , private router:Router
@@ -49,13 +49,13 @@ export class AppRouter {
     init(){
         console.log("[AppRouter.init]");
 
-        // Listen to changes on the appModel.currentAlbum
-        this.appModel.currentAlbum$.subscribe( this.onCurrentAlbum );
-    }
-
-    onCurrentAlbum = ( album:Album ) => {
-        console.log("[AppRouter.onCurrentAlbum] album:", album);
-        this.navigate(album);
+        // Listen to changes on the appModel.currentAlbum.
+        // FIXME: When do I unsubscribe from this ?!
+        this._albumSub = this.appModel
+                             .currentAlbum$
+                             .subscribe(
+                                ( album:Album ) => this.navigate(album)
+                             );
     }
 
     /**
@@ -63,7 +63,7 @@ export class AppRouter {
      * @param  {Album}  album
      */
     navigate( album:Album ) {
-        console.log("[AppRouter.navigate] album.id:", album.id);
+        console.log("[AppRouter.navigate] album:", album);
 
         if (album)
             this.router.navigate( ['/album', album.id] );
