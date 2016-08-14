@@ -2,9 +2,12 @@ import './rxjs-extensions';
 
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
 import { Album } from './album.model';
+import { User } from './user.model';
+import { Photo } from './photo.model';
+import { AppModel } from './model/app.model';
+import { AppRouter } from './app.routing';
 import { JsonPlaceHolderService } from './jsonplaceholder.service';
 
 /**
@@ -40,15 +43,12 @@ export class AppComponent implements OnInit {
      * The data is retrieved by JsonPlaceHolderService. It could have come from anywhere else.
      * @type {Album[]}
      */
-    private albums: Album[];
+    private albums:Album[];
 
-    private selectedAlbum: Album;
+    private album:Album;
 
-    private user: User;
+    private photos:Photo[];
 
-    private photos: Photo[];
-
-    private routeParamsSub: Subscription;
 
     /**
      * It's the main visual component. It's two main children are: AlbumListComponent & AlbumComponent.
@@ -58,7 +58,9 @@ export class AppComponent implements OnInit {
     constructor(
         private router:Router
       , private route:ActivatedRoute
-      , private service:JsonPlaceHolderService ){
+      , private service:JsonPlaceHolderService
+      , private appModel:AppModel
+      , private appRouter:AppRouter ){
 
         console.log("[AppComponent.constructor]");
     }
@@ -66,17 +68,17 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         console.log("[AppComponent.ngOnInit]");
 
+        this.appRouter.init();
+
         // Get the list of Albums from the web
         this.service.list<Album>( Album )
             .subscribe(
-                ( albums:Album[] ) => { this.albums = albums },
+                ( albums:Album[] ) => {
+                    this.albums = albums;
+                    this.appModel.setAlbums( albums );
+                },
                 error => console.error("[AppComponent.ngOnInit] error:", error)
             );
-
-        // re-use the same component instance and update the parameter.
-        // detect when the route parameters change from within the same instance.
-        // The observable params property handles that beautifully.
-        this.routeParamsSub = this.route.params.subscribe( this.onRouteParams );
     }
 
     /**
@@ -84,65 +86,28 @@ export class AppComponent implements OnInit {
      * @param  {Album}  album The selected Album from AlbumListComponent.
      */
     onAlbumSelected( album:Album ) {
-        console.log("[AppComponent.onAlbumSelected] album.id:", album.id);
-        this.navigate( album );
-    }
+        console.log("[AppComponent.onAlbumSelected] album:", album);
 
-    /**
-     * Navigate between Albums using the Router (changes the browser URL based on selection).
-     * @param  {Album}  album
-     */
-    navigate( album:Album ) {
-        console.log("[AppComponent.navigate] album.id:", album.id);
+        this.getUser( album.userId );
+        this.getPhotos( album.id );
 
-        if (album)
-            this.router.navigate( ['/album', album.id] );
-        else
-            this.router.navigate( [''] );
-    }
-
-    onRouteParams = ( params:Params ) => {
-        let id = +params['id']; // (+) converts string 'id' to a number
-
-        console.log("[AppComponent.onRouteParams] id:", id);
-
-        // Crashes the App if Route Param 'id' is invalid!
-        this.getAlbum( id );
-    };
-
-    getAlbum( id:number ) {
-        console.log("[AppComponent.getAlbum] id:", id, ", album:", this.album);
-
-        // Fetch an Album if none was passed or if the id from the Route is different from current Album.id
-        if (!this.album || this.album.id !== id) {
-
-            this.user = null;
-            this.photos = null;
-
-            this.service.get<Album>( id, Album )
-                .subscribe(
-                    this.onAlbumSuccess,
-                    error => console.error('[AppComponent.getAlbum] error:', error)
-                );
-        }
-        else {
-            this.getUser( this.album.userId );
-            this.getPhotos( this.album.id );
-        }
+        this.appModel.setCurrentAlbum( album );
     }
 
     getUser( id:number ) {
         console.log("[AppComponent.getUser] id:", id);
 
-        // Fetch an User if none is available or if current User.id is different from current Album.userId
-        if (!this.user || (this.album && this.album.userId !== id)) {
+        let user:User = this.appModel.getUser(id);
+        let currentAlbum:Album = this.appModel.currentAlbum();
 
-            this.user = null;
+        // Fetch an User if none is available or if current User.id is different from current Album.userId
+        if (!user || (currentAlbum && currentAlbum.userId !== id)) {
+
             this.photos = null;
 
             this.service.get<User>( id, User )
                 .subscribe(
-				            this.onUserSuccess,
+				            (user:User) => this.appModel.setCurrentUser(user),
 				            error => console.error('[AppComponent.getUser] error:', error)
                 );
         }
@@ -152,34 +117,8 @@ export class AppComponent implements OnInit {
         console.log("[AppComponent.getPhotos] albumId:", albumId);
         this.service.list<Photo>( Photo, `?albumId=${albumId}` )
             .subscribe(
-                this.onPhotosSuccess,
+                (photos:Photo[]) => this.appModel.setPhotos(photos),
                 error => console.error('[AlbumListComponent.getPhotos] error:', error)
             );
-    }
-
-    onAlbumSuccess = ( album:Album ) => {
-        console.log("[AppComponent.onAlbumSuccess] album:", album);
-
-        this.album = album;
-
-        // Update the Album's User and Photos
-        this.getPhotos( this.album.id );
-
-        this.getUser( this.album.userId );
-    }
-
-    onUserSuccess = ( user:User ) => {
-        console.log("[AppComponent.onUserSuccess] user:", user);
-        this.user = user;
-    }
-
-    onPhotosSuccess = ( photos:Photo[] ) => {
-        console.log("[AppComponent.onPhotosSuccess] photos.length:", photos.length);
-        this.photos = photos;
-    }
-
-    ngOnDestroy() {
-        console.log("[AppComponent.ngOnDestroy]");
-        this.routeParamsSub.unsubscribe();
     }
 }

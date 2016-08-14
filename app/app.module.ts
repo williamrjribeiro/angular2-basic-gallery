@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { JsonPlaceHolderService } from './jsonplaceholder.service';
-
+import { AppModel } from './model/app.model';
 import { AlbumListComponent } from './album-list.component';
 import { MediaGridComponent } from './media-grid.component';
 import { UserInfoComponent } from './user-info.component';
@@ -14,7 +14,7 @@ import { AlbumComponent } from './album.component';
 import { AboutComponent } from './about.component';
 import { AppComponent } from './app.component';
 
-import { routing } from './app.routing';
+import { AppRouter, routing } from './app.routing';
 
 @NgModule({
   imports: [
@@ -32,7 +32,7 @@ import { routing } from './app.routing';
     , AboutComponent
     , AppComponent
   ],
-  providers: [ JsonPlaceHolderService ],
+  providers: [ JsonPlaceHolderService, AppModel, AppRouter ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule {
