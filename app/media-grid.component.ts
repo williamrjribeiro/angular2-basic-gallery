@@ -20,7 +20,7 @@ import { AppModel, Photo } from './app.model';
             <img src="{{photo.thumbnailUrl}}"
                  class="figure-img img-fluid img-rounded"
                  alt=""/>
-            <figcaption class="figure-caption cut-off">{{photo.title}}</figcaption>
+            <figcaption class="figure-caption text-xs-left">{{photo.title}}</figcaption>
           </figure>
         </div>
       </div>

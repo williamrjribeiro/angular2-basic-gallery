@@ -74,15 +74,12 @@ export class JsonPlaceHolderService {
 
         // In a real world app, we might use a remote logging infrastructure
         // We'd also dig deeper into the error to get a better message
-        let errMsg: string = "";
+        let errMsg: string;
 
         if ( error.status )
             errMsg = `${error.status} - ${error.statusText}`
-
-        if ( error.message )
-            errMsg += ' : '+ error.message;
         else
-            errMsg += ' Server error';
+            errMsg = 'Server error';
 
         return Observable.throw( errMsg );
     }
