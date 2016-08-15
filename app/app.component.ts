@@ -18,7 +18,7 @@ import { JsonPlaceHolderService } from './jsonplaceholder.service';
     // RouterOutlet is one of the directives provided by the RouterModule.
     // The router displays each component immediately below the <router-outlet> as we navigate through the application
     template: `
-        <div class="container">
+        <div class="{{_containerClass}}" (window:resize)="_onResize()">
           <h1>Angular2 Gallery</h1>
           <div *ngIf="_errorMsg" class="row">
               <div class="col-sm-12">
@@ -44,6 +44,7 @@ import { JsonPlaceHolderService } from './jsonplaceholder.service';
 export class AppComponent implements OnInit {
 
     private _errorMsg:string;
+    private _containerClass = 'container';
 
     /**
      * List of Albums to be displayed by AlbumListComponent.
@@ -65,6 +66,7 @@ export class AppComponent implements OnInit {
       , private appRouter:AppRouter ){
 
         console.log("[AppComponent.constructor]");
+        this._onResize();
     }
 
     ngOnInit() {
@@ -135,4 +137,12 @@ export class AppComponent implements OnInit {
         console.error("[AppComponent.onError] error:", error);
         this._errorMsg = error;
     };
+
+    private _onResize() {
+        console.log("[AppComponent.getPhotos] document.body.clientWidth:", document.body.clientWidth);
+        if( document.body.clientWidth > 1000 )
+            this._containerClass = 'container';
+        else
+            this._containerClass = 'container-fluid';
+    }
 }
