@@ -7,19 +7,21 @@ import { AppModel, Album } from './app.model';
 @Component({
     selector: 'album-list',
     template: `
-      <h4>{{title}}</h4>
-      <h6 *ngIf="!albums">fetching Album list...</h6>
-      <nav class="scroll-list nav nav-pills nav-stacked">
-          <a *ngFor="let album of albums;"
-             role="presentation"
-             class="nav-link"
-             [class.active]="album === selectedAlbum"
-             (click)="onSelect(album, $event)"
-             title="Album id: {{album.id}} - User id: {{album.userId}}"
-             href="#">
-              {{album.title | uppercase}}
-          </a>
-      </nav>
+      <div class="height-100-md">
+        <h4 class="hidden-sm-down">{{title}}</h4>
+        <h6 *ngIf="!albums">fetching Album list...</h6>
+        <nav class="height-100-md scroll-list scroll-list-md-2 nav nav-pills nav-stacked">
+            <a *ngFor="let album of albums;"
+               role="presentation"
+               class="nav-link"
+               [class.active]="album === selectedAlbum"
+               (click)="onSelect(album, $event)"
+               title="Album id: {{album.id}} - User id: {{album.userId}}"
+               href="#">
+                {{album.title | uppercase}}
+            </a>
+        </nav>
+      </div>
     `
 })
 export class AlbumListComponent implements OnInit, OnDestroy {

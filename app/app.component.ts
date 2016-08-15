@@ -6,6 +6,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AppModel, Album, User, Photo } from './app.model';
 import { AppRouter } from './app.routing';
 import { JsonPlaceHolderService } from './jsonplaceholder.service';
+import { FluidComponent } from './fluid.component';
 
 /**
  * It's the main visual component. It's two main children are: AlbumListComponent & AlbumComponent.
@@ -18,7 +19,7 @@ import { JsonPlaceHolderService } from './jsonplaceholder.service';
     // RouterOutlet is one of the directives provided by the RouterModule.
     // The router displays each component immediately below the <router-outlet> as we navigate through the application
     template: `
-        <div class="{{_containerClass}}" (window:resize)="_onResize()">
+        <div class="{{_containerClass}} height-100-md" (window:resize)="_onResize()">
           <h1>Angular2 Gallery</h1>
           <div *ngIf="_errorMsg" class="row">
               <div class="col-sm-12">
@@ -27,14 +28,14 @@ import { JsonPlaceHolderService } from './jsonplaceholder.service';
                   </div>
               </div>
           </div>
-          <div class="row">
-            <div class="col-md-4">
+          <div class="row height-100-md">
+            <div class="col-md-4 height-100-md">
               <album-list [useAppModel]="false"
                           [albums]="_albums"
                           (selected)="onAlbumSelected($event)">
               </album-list>
             </div>
-            <div class="col-md-8" >
+            <div class="col-md-8 height-100" >
               <router-outlet></router-outlet>
             </div>
           </div>
@@ -139,7 +140,7 @@ export class AppComponent implements OnInit {
     };
 
     private _onResize() {
-        console.log("[AppComponent.getPhotos] document.body.clientWidth:", document.body.clientWidth);
+        console.log("[AppComponent._onResize] document.body.clientWidth:", document.body.clientWidth);
         if( document.body.clientWidth > 1000 )
             this._containerClass = 'container';
         else

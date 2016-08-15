@@ -3,11 +3,12 @@ import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angu
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppModel, Photo } from './app.model';
+import { FluidComponent } from './fluid.component';
 
 @Component({
     selector: 'media-grid',
     template: `
-    <div class="container scroll-list">
+    <div class="{{fluidClass}} scroll-list">
       <h6 *ngIf="!photos">fetching Album Photos...</h6>
       <div *ngIf="photos" class="row">
         <div *ngFor="let photo of photos"
@@ -27,15 +28,16 @@ import { AppModel, Photo } from './app.model';
     </div>
     `
 })
-export class MediaGridComponent implements OnInit, OnDestroy {
+export class MediaGridComponent extends FluidComponent implements OnInit, OnDestroy {
 
     @Input()  useAppModel:boolean;
-    photos:Photo[];
+    @Input()  photos:Photo[];
     @Output() selected:EventEmitter<Photo> = new EventEmitter<Photo>();
 
     private _photosSub:Subscription;
 
     constructor( private appModel:AppModel ){
+        super();
         console.log("[MediaGridComponent.constructor]");
     }
 

@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 
 import { JsonPlaceHolderService } from './jsonplaceholder.service';
 import { AppModel } from './app.model';
+import { FluidComponent } from './fluid.component';
 import { AlbumListComponent } from './album-list.component';
 import { MediaGridComponent } from './media-grid.component';
 import { UserInfoComponent } from './user-info.component';
@@ -32,7 +33,7 @@ import { AppRouter, routing } from './app.routing';
     , AboutComponent
     , AppComponent
   ],
-  providers: [ JsonPlaceHolderService, AppModel, AppRouter ],
+  providers: [ JsonPlaceHolderService, AppModel, AppRouter, FluidComponent ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule {
