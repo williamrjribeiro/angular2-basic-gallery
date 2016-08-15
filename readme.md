@@ -37,17 +37,21 @@ has to be injected on then to be displayed. I haven't got the whole picture of A
 For instance, when an album is selected from the list:
  - the `AppComponent` updates the `AppModel.currentAlbum` and fetches related data using `JsonPlaceHolderService`.
  - `AppRouting` is subscribed to `AppModel.currentAlbum$` and sees the change initiating a `Router.navigate`
- - The `AlbumComponent` is aded to the screen. It contains the `UserInfoComponent` & `MediaGridComponent`.
+ - The `AlbumComponent` is added to the screen. It contains the `UserInfoComponent` & `MediaGridComponent`.
  - These two components were created with `[useAppModel]=true` so the former subscribes to `AppModel.currentUser$` and the latter to `AppModel.photos$`.
  - Once `JsonPlaceHolderService` returns the data to `AppComponent`, it updates the model accordingly
  - View components update automatically
 
- This is a very common pattern among Flex developers so I tried to implement it with Angular2. I think it makes the app
- and its components very reusable and simple since they are so dumb. All this binding and reactiveness makes a bit hard to find where stuff happens, how information flows inside the app.
+This is a very common pattern among Flex developers so I tried to implement it with Angular2. I think it makes the app
+and its components very reusable and simple since they are so dumb. All this binding and reactiveness makes a bit hard to find where stuff happens and see how information flows inside the app. But if you keep consistent and it's really easy to understand.
 
- Install
- -------
- You just need NodeJS and Gulp installed.
- `npm install`
+Bootstarp 4 Alpha just for fun!
 
- Open browser on localhost:8000
+Install
+-------
+You just need NodeJS and Gulp installed. From terminal on the root source folder:
+
+`npm install`
+
+
+Open browser on localhost:8000
