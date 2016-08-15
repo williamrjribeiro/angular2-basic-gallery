@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
-import { Album, User, Photo } from './app.model';
+import { Photo } from './app.model';
+import { FluidComponent } from './fluid.component';
 
 /**
  * It's responsible displaying data about an Album mainly User info and Photos.
@@ -10,12 +11,11 @@ import { Album, User, Photo } from './app.model';
 @Component({
     selector: 'album',
     template: `
-      <div class="{{_containerClass}}">
-         <h2 *ngIf="album" title=" Album id: {{album.id}}">Album: <em>{{album.title}}</em></h2>
+      <div class="{{fluidClass}} height-100-md" (window:resize)="onResize()">
          <div class="row">
            <user-info [useAppModel]="true"></user-info>
          </div>
-         <div class="row">
+         <div class="row height-100-md">
            <media-grid [useAppModel]="true"
                        (selected)="onPhotoSelected($event)">
            </media-grid>
@@ -23,13 +23,11 @@ import { Album, User, Photo } from './app.model';
       </div>
     `
 })
-export class AlbumComponent implements OnInit, OnDestroy  {
-
-    private _containerClass = 'container';
+export class AlbumComponent extends FluidComponent implements OnInit, OnDestroy  {
 
     constructor(){
+        super();
         console.log("[AlbumComponent.constructor]");
-        this._onResize();
     }
 
     // Called only once per instanciation
@@ -43,13 +41,5 @@ export class AlbumComponent implements OnInit, OnDestroy  {
 
     onPhotoSelected( photo:Photo ){
         console.log("[AlbumComponent.onPhotoSelected] photo:", photo);
-    }
-
-    private _onResize(){
-        console.log("[AlbumComponent._onResize] document.body.clientWidth:", document.body.clientWidth);
-        if( document.body.clientWidth > 768 )
-            this._containerClass = 'container';
-        else
-            this._containerClass = 'container-fluid';
     }
 }

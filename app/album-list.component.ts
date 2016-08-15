@@ -8,7 +8,7 @@ import { AppModel, Album } from './app.model';
     selector: 'album-list',
     template: `
       <div class="height-100-md">
-        <h4 class="hidden-sm-down">{{title}}</h4>
+        <h4 title="Click on item to toggle album selection">Available albums:</h4>
         <h6 *ngIf="!albums">fetching Album list...</h6>
         <nav class="height-100-md scroll-list scroll-list-md-2 nav nav-pills nav-stacked">
             <a *ngFor="let album of albums;"

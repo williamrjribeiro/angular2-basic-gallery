@@ -19,7 +19,7 @@ import { FluidComponent } from './fluid.component';
     // RouterOutlet is one of the directives provided by the RouterModule.
     // The router displays each component immediately below the <router-outlet> as we navigate through the application
     template: `
-        <div class="{{_containerClass}} height-100-md" (window:resize)="_onResize()">
+        <div class="{{fluidClass}} height-100-md" (window:resize)="onResize()">
           <h1>Angular2 Gallery</h1>
           <div *ngIf="_errorMsg" class="row">
               <div class="col-sm-12">
@@ -35,17 +35,16 @@ import { FluidComponent } from './fluid.component';
                           (selected)="onAlbumSelected($event)">
               </album-list>
             </div>
-            <div class="col-md-8 height-100" >
+            <div class="col-md-8 height-100-md" >
               <router-outlet></router-outlet>
             </div>
           </div>
         </div>
     `
 })
-export class AppComponent implements OnInit {
+export class AppComponent extends FluidComponent implements OnInit {
 
     private _errorMsg:string;
-    private _containerClass = 'container';
 
     /**
      * List of Albums to be displayed by AlbumListComponent.
@@ -65,9 +64,8 @@ export class AppComponent implements OnInit {
       , private service:JsonPlaceHolderService
       , private appModel:AppModel
       , private appRouter:AppRouter ){
-
+        super();
         console.log("[AppComponent.constructor]");
-        this._onResize();
     }
 
     ngOnInit() {
@@ -138,12 +136,4 @@ export class AppComponent implements OnInit {
         console.error("[AppComponent.onError] error:", error);
         this._errorMsg = error;
     };
-
-    private _onResize() {
-        console.log("[AppComponent._onResize] document.body.clientWidth:", document.body.clientWidth);
-        if( document.body.clientWidth > 1000 )
-            this._containerClass = 'container';
-        else
-            this._containerClass = 'container-fluid';
-    }
 }

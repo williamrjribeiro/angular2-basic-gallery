@@ -11,9 +11,14 @@ export class FluidComponent {
 
     private onResize(){
         console.log("[FluidComponent._onResize] document.body.clientWidth:", document.body.clientWidth);
-        if( document.body.clientWidth > 768 )
+
+        let isFluid:boolean = this.fluidClass.indexOf('container-fluid');
+
+        if( document.body.clientWidth > 768 ){
             this.fluidClass = 'container';
-        else
+        }
+        else {
             this.fluidClass = 'container-fluid';
+        }
     }
 }
