@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Params, Router, Routes, RouterModule } from '@angular/router';
+import { ActivatedRoute, Event, Params, Router, Routes, RouterModule } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -40,9 +40,9 @@ export class AppRouter {
 
     private _albumSub:Subscription;
 
-    constructor( private appModel:AppModel
-               , private router:Router
-               , private route:ActivatedRoute ){
+    constructor( private _appModel:AppModel
+               , private _router:Router
+               , private _route:ActivatedRoute ){
         console.log("[AppRouter.constructor]");
     }
 
@@ -51,23 +51,21 @@ export class AppRouter {
 
         // Listen to changes on the appModel.currentAlbum.
         // FIXME: When do I unsubscribe from this ?!
-        this._albumSub = this.appModel
+        this._albumSub = this._appModel
                              .currentAlbum$
-                             .subscribe(
-                                ( album:Album ) => this.navigate(album)
-                             );
+                             .subscribe( this.navigate );
     }
 
     /**
      * Navigate between Albums using the Router (changes the browser URL based on selection).
      * @param  {Album}  album
      */
-    navigate( album:Album ) {
+    navigate = ( album:Album ) => {
         console.log("[AppRouter.navigate] album:", album);
 
         if (album)
-            this.router.navigate( ['/album', album.id] );
+            this._router.navigate( [`album/`, album.id] );
         else
-            this.router.navigate( [''] );
-    }
+            this._router.navigate( [''] );
+    };
 }

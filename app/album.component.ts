@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Photo } from './app.model';
 import { FluidComponent } from './fluid.component';
@@ -17,7 +18,7 @@ import { FluidComponent } from './fluid.component';
          </div>
          <div class="row height-100-md">
            <media-grid [useAppModel]="true"
-                       (selected)="onPhotoSelected($event)">
+                       (onSelected)="_onPhotoSelected($event)">
            </media-grid>
          </div>
       </div>
@@ -25,7 +26,7 @@ import { FluidComponent } from './fluid.component';
 })
 export class AlbumComponent extends FluidComponent implements OnInit, OnDestroy  {
 
-    constructor(){
+    constructor(private route:ActivatedRoute){
         super();
         console.log("[AlbumComponent.constructor]");
     }
@@ -39,7 +40,7 @@ export class AlbumComponent extends FluidComponent implements OnInit, OnDestroy 
         console.log("[AlbumComponent.ngOnDestroy]");
     }
 
-    onPhotoSelected( photo:Photo ){
-        console.log("[AlbumComponent.onPhotoSelected] photo:", photo);
+    private _onPhotoSelected( photo:Photo ){
+        console.log("[AlbumComponent._onPhotoSelected] photo:", photo);
     }
 }

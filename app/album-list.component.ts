@@ -15,7 +15,7 @@ import { AppModel, Album } from './app.model';
                role="presentation"
                class="nav-link"
                [class.active]="album === selectedAlbum"
-               (click)="onSelect(album, $event)"
+               (click)="_onSelect(album, $event)"
                title="Album id: {{album.id}} - User id: {{album.userId}}"
                href="#">
                 {{album.title | uppercase}}
@@ -26,47 +26,57 @@ import { AppModel, Album } from './app.model';
 })
 export class AlbumListComponent implements OnInit, OnDestroy {
 
-    @Input() useAppModel:boolean;
-    @Input() albums: Album[];
-    @Output() selected:EventEmitter<Album> = new EventEmitter<Album>();
+    @Input()  useAppModel:boolean = false;
+    @Input()  albums: Album[] = null;
+    @Input()  selectedAlbum: Album = null;
+    @Output() onSelected:EventEmitter<any[]> = new EventEmitter<any[]>();
 
-    private title = 'Albums';
-    private selectedAlbum: Album;
-    private _albumsSub:Subscription;
+    private _albumsSub:Subscription = null;
+    private _albumSub:Subscription = null;
 
-    constructor( private appModel:AppModel ) {
+    constructor( private _appModel:AppModel ) {
         console.log("[AlbumListComponent.constructor]");
     }
 
     ngOnInit() {
         console.log("[AlbumListComponent.ngOnInit] useAppModel:", this.useAppModel);
         if( this.useAppModel ){
-            this._albumsSub = this.appModel
-                                  .albums$.subscribe(
-                                      ( albums:Album[] ) => this.albums = albums
-                                  );
+
+            this._albumsSub = this._appModel
+                                  .albums$
+                                  .subscribe( ( albums:Album[] ) => this.albums = albums );
+
+            this._albumSub = this._appModel
+                                 .currentAlbum$
+                                 .subscribe( (album:Album) => this.selectedAlbum = album );
         }
     }
 
     ngOnDestroy() {
         console.log("[AlbumListComponent.ngOnDestroy]");
-        this.albums = null;
         if( this._albumsSub )
             this._albumsSub.unsubscribe();
+
+        if( this._albumSub )
+            this._albumSub.unsubscribe();
+
+        this.albums = null;
+        this.selectedAlbum = null;
     }
 
-    onSelect(album: Album, event: any) {
-        console.log("[AlbumListComponent.onSelect] hero.name:", album.title);
-
-        // Don't allow link click to navigate
-        event.preventDefault();
+    private _toggleSelection( album:Album ) {
+        console.log("[AlbumListComponent._toggleSelection] album:", album);
 
         if ( this.selectedAlbum == album )
-            this.selectedAlbum = null;
+            this.useAppModel ? this._appModel.setCurrentAlbum( null ) : this.selectedAlbum = null;
         else
-            this.selectedAlbum = album;
+            this.useAppModel ? this._appModel.setCurrentAlbum( album )  : this.selectedAlbum = album;
+    }
 
-        //this.navigate();
-        this.selected.emit( this.selectedAlbum );
+    private _onSelect(album: Album, event: any) {
+        console.log("[AlbumListComponent._onSelect] album:", album);
+        // Don't allow link click to navigate
+        event.preventDefault();
+        this._toggleSelection( album );
     }
 }

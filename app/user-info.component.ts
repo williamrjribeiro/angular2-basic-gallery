@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { AfterViewInit, Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -13,21 +13,21 @@ import { AppModel, User } from './app.model';
       </div>
     `
 })
-export class UserInfoComponent implements OnInit, OnDestroy {
+export class UserInfoComponent implements AfterViewInit, OnInit, OnDestroy {
 
-    private _userSub:Subscription;
+    @Input() useAppModel:boolean = false;
+    @Input() user:User = null;
 
-    @Input() useAppModel:boolean;
-    @Input() user:User;
+    private _userSub:Subscription = null;
 
-    constructor( private appModel:AppModel ){
+    constructor( private _appModel:AppModel ){
         console.log("[UserInfoComponent.constructor]");
     }
 
     ngOnInit() {
         console.log("[UserInfoComponent.ngOnInit] useAppModel:", this.useAppModel)
         if( this.useAppModel ){
-            this._userSub = this.appModel
+            this._userSub = this._appModel
                                 .currentUser$
                                 .subscribe(
                                     ( user:User ) => this.user = user
@@ -35,10 +35,16 @@ export class UserInfoComponent implements OnInit, OnDestroy {
         }
     }
 
+    ngAfterViewInit() {
+        console.log("[UserInfoComponent.ngAfterViewInit]");
+        if( this.useAppModel )
+            this.user = this._appModel.currentUser();
+    }
+
     ngOnDestroy() {
         console.log("[UserInfoComponent.ngOnDestroy]");
-        this.user = null;
         if( this._userSub )
             this._userSub.unsubscribe();
+        this.user = null;
     }
 }

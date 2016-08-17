@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -16,7 +16,7 @@ import { FluidComponent } from './fluid.component';
              class="col-lg-3 col-md-4 col-xs-6 thumb">
 
           <figure class="figure"
-             (click)="onSelect(photo)"
+             (click)="_onSelect(photo)"
              title="The photo {{photo.title}} from Album {{photo.albumId}}">
             <img src="{{photo.thumbnailUrl}}"
                  class="figure-img img-fluid img-rounded"
@@ -28,15 +28,15 @@ import { FluidComponent } from './fluid.component';
     </div>
     `
 })
-export class MediaGridComponent extends FluidComponent implements OnInit, OnDestroy {
+export class MediaGridComponent extends FluidComponent implements AfterViewInit, OnInit, OnDestroy {
 
-    @Input()  useAppModel:boolean;
-    @Input()  photos:Photo[];
-    @Output() selected:EventEmitter<Photo> = new EventEmitter<Photo>();
+    @Input()  useAppModel:boolean = false;
+    @Input()  photos:Photo[] = null;
+    @Output() onSelected:EventEmitter<Photo> = new EventEmitter<Photo>();
 
-    private _photosSub:Subscription;
+    private _photosSub:Subscription = null;
 
-    constructor( private appModel:AppModel ){
+    constructor( private _appModel:AppModel ){
         super();
         console.log("[MediaGridComponent.constructor]");
     }
@@ -44,7 +44,7 @@ export class MediaGridComponent extends FluidComponent implements OnInit, OnDest
     ngOnInit() {
         console.log("[MediaGridComponent.ngOnInit] useAppModel:", this.useAppModel);
         if( this.useAppModel ){
-            this._photosSub = this.appModel
+            this._photosSub = this._appModel
                                   .photos$
                                   .subscribe(
                                       ( photos:Photo[] ) => this.photos = photos
@@ -52,16 +52,22 @@ export class MediaGridComponent extends FluidComponent implements OnInit, OnDest
         }
     }
 
-    onSelect(photo:Photo) {
-        console.log("[MediaGridComponent.onSelect] photo.title:", photo.title);
-        // Dispatch/Emit the selected event/message so other parts of UI can update (AlbumComponent)
-        this.selected.emit(photo);
+    ngAfterViewInit() {
+        console.log("[MediaGridComponent.ngAfterViewInit]");
+        if( this.useAppModel )
+            this.photos = this._appModel.photos();
     }
 
     ngOnDestroy() {
         console.log("[MediaGridComponent.ngOnDestroy]");
-        this.photos = null;
         if( this._photosSub )
             this._photosSub.unsubscribe();
+        this.photos = null;
+    }
+
+    private _onSelect( photo:Photo ) {
+        console.log("[MediaGridComponent._onSelect] photo.title:", photo.title);
+        // Dispatch/Emit the selected event/message so other parts of UI can update (AlbumComponent)
+        this.onSelected.emit(photo);
     }
 }
