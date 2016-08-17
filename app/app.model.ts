@@ -29,8 +29,10 @@ class AppModel {
     private _currentPhotoSubject:Subject<Photo> = new Subject<Photo>();
     currentPhoto$:Observable<Photo>  = this._currentPhotoSubject.asObservable();
 
+    private _errorMsg:string = null;
+
     setAlbums( albums:Album[] ) {
-        console.log("[AppModel.setAlbums] albums:", albums.length);
+        console.log("[AppModel.setAlbums] albums:", albums ? albums.length : album);
 
         if( this._albums == albums )
             return;
@@ -40,7 +42,7 @@ class AppModel {
     }
 
     setPhotos( photos:Photo[] ) {
-        console.log("[AppModel.setPhotos] photos:", photos.length);
+        console.log("[AppModel.setPhotos] photos:", photos ? photos.length : photos);
 
         if( this._photos == photos )
             return;
@@ -74,6 +76,10 @@ class AppModel {
 
     getUser( id:number ):User {
         return this._usersCache.get( id );
+    }
+
+    getAlbum( id:number ):Album {
+        return this._albums.filter( a => a.id == id )[0];
     }
 
     currentAlbum():Album {

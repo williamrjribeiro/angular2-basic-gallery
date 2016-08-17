@@ -68,9 +68,14 @@ export class AlbumListComponent implements OnInit, OnDestroy {
         console.log("[AlbumListComponent._toggleSelection] album:", album);
 
         if ( this.selectedAlbum == album )
-            this.useAppModel ? this._appModel.setCurrentAlbum( null ) : this.selectedAlbum = null;
+            this.selectedAlbum = null;
         else
-            this.useAppModel ? this._appModel.setCurrentAlbum( album )  : this.selectedAlbum = album;
+            this.selectedAlbum = album;
+
+        if( this.useAppModel )
+            this._appModel.setCurrentAlbum( this.selectedAlbum );
+
+        this.onSelected.emit( this.selectedAlbum );
     }
 
     private _onSelect(album: Album, event: any) {
