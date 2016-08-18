@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+/**
+ * Shows basic info about the app & its developer when no Album is selected.
+ */
 @Component({
     selector: 'about',
     template: `

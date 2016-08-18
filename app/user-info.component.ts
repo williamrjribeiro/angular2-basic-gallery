@@ -1,9 +1,12 @@
-import { AfterViewInit, Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppModel, User } from './app.model';
 
+/**
+ * A very basic component to show some information about a User.
+ */
 @Component({
     selector: 'user-info',
     template: `
@@ -13,7 +16,7 @@ import { AppModel, User } from './app.model';
       </div>
     `
 })
-export class UserInfoComponent implements AfterViewInit, OnInit, OnDestroy {
+export class UserInfoComponent implements OnInit, OnDestroy {
 
     @Input() useAppModel:boolean = false;
     @Input() user:User = null;
@@ -35,16 +38,14 @@ export class UserInfoComponent implements AfterViewInit, OnInit, OnDestroy {
         }
     }
 
-    ngAfterViewInit() {
-        console.log("[UserInfoComponent.ngAfterViewInit]");
-        if( this.useAppModel )
-            this.user = this._appModel.currentUser();
-    }
-
     ngOnDestroy() {
         console.log("[UserInfoComponent.ngOnDestroy]");
-        if( this._userSub )
+
+        if( this._userSub ) {
             this._userSub.unsubscribe();
+            this._userSub = null;
+        }
+
         this.user = null;
     }
 }

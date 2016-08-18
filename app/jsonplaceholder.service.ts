@@ -33,7 +33,7 @@ export class JsonPlaceHolderService {
         console.log("[JsonPlaceHolderService.list]");
         return this.http.get( this.url + this.resolveServicePath(klass) + query )
             .map( ( res:Response ) => { return res.json() as T[] } )
-            .catch( this.handleError );
+            .catch( this._handleError );
     }
 
     /**
@@ -49,7 +49,7 @@ export class JsonPlaceHolderService {
         console.log("[JsonPlaceHolderService.getGeneric] id:", id);
         return this.http.get( this.url + this.resolveServicePath(klass) + "/" + id + query )
             .map( ( res:Response ) => { return res.json() as T; } )
-            .catch( this.handleError) ;
+            .catch( this._handleError) ;
     }
 
     /**
@@ -69,8 +69,8 @@ export class JsonPlaceHolderService {
         }
     }
 
-    private handleError( error:Response ) {
-        console.error("[JsonPlaceHolderService.handleError] error:", error);
+    private _handleError( error:Response ) {
+        console.error("[JsonPlaceHolderService._handleError] error:", error);
 
         // In a real world app, we might use a remote logging infrastructure
         // We'd also dig deeper into the error to get a better message
@@ -79,7 +79,7 @@ export class JsonPlaceHolderService {
         if ( error.status )
             errMsg = `${error.status} - ${error.statusText}`
         else
-            errMsg = 'Server error';
+            errMsg = 'Server error.    (╯°□°)╯︵ ┻━┻';
 
         return Observable.throw( errMsg );
     }

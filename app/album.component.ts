@@ -1,17 +1,17 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Photo } from './app.model';
 import { FluidComponent } from './fluid.component';
+import { PhotoModalComponent } from './photo.component';
 
 /**
  * It's responsible displaying data about an Album mainly User info and Photos.
  * It has 2 child components: UserInfoComponent & MediaGridComponent.
- * It uses JsonPlaceHolderService to fetch User & Photo data to inject on child components.
  */
 @Component({
     selector: 'album',
     template: `
+      <photo-modal [photo]="_currentPhoto"></photo-modal>
       <div class="{{fluidClass}} height-100-md" (window:resize)="onResize()">
          <div class="row">
            <user-info [useAppModel]="true"></user-info>
@@ -26,12 +26,13 @@ import { FluidComponent } from './fluid.component';
 })
 export class AlbumComponent extends FluidComponent implements OnInit, OnDestroy  {
 
-    constructor(private route:ActivatedRoute){
+    private _currentPhoto:Photo = null;
+
+    constructor(){
         super();
         console.log("[AlbumComponent.constructor]");
     }
 
-    // Called only once per instanciation
     ngOnInit(){
         console.log("[AlbumComponent.ngOnInit]");
     }
@@ -42,5 +43,11 @@ export class AlbumComponent extends FluidComponent implements OnInit, OnDestroy 
 
     private _onPhotoSelected( photo:Photo ){
         console.log("[AlbumComponent._onPhotoSelected] photo:", photo);
+        this._currentPhoto = photo;
+
+        if( this._currentPhoto )
+            $('#photoModal').modal();
     }
 }
+
+declare var $:any; // Just for TypeScript compiler stop complaining...

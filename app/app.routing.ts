@@ -7,7 +7,7 @@ import { AppModel, Album, User, Photo } from './app.model';
 import { JsonPlaceHolderService } from './jsonplaceholder.service';
 import { AlbumComponent } from './album.component';
 import { AboutComponent } from './about.component';
-import { PhotoComponent } from './photo.component';
+import { PhotoModalComponent } from './photo.component';
 
 // Route definitions. Mapping url#paths to Components
 // Routed Views/Components are rendered on <router-outlet> (on Root Component)
@@ -21,11 +21,12 @@ const appRoutes: Routes = [
         path: 'album/:id',
         component: AlbumComponent
     },
-    {
+    /*{
+        // TODO: Implement Route. For now just using jQuery
         // Dynamic route definition. path/:token1/:token2
         path: 'photo/:id',
-        component: PhotoComponent
-    },
+        component: PhotoModalComponent
+    },*/
     {
         path: '**',
         redirectTo: '/',
@@ -36,6 +37,12 @@ const appRoutes: Routes = [
 // The forRoot method gives us the Router service providers and directives needed for routing.
 export const routing = RouterModule.forRoot(appRoutes);
 
+/**
+ * One of the most important Classes of the app.
+ * AppRouter listen to Router events and determines which resource to load from the web
+ * using JsonPlaceHolderService. Once the data is returned it upates AppModel so
+ * all views subscribed can update.
+ */
 @Injectable()
 export class AppRouter {
 
@@ -52,7 +59,7 @@ export class AppRouter {
         this._service.list<Album>( Album )
                      .subscribe(
                          ( albums:Album[] ) => this._appModel.setAlbums( albums ) ,
-                         this._onError
+                         _appModel.setError
                      );
         // Subscribe to Router Events. This is where we drive the App
         this._routeSub = this._router
@@ -73,6 +80,25 @@ export class AppRouter {
         else
             this._router.navigate( [''] );
     }
+    
+    private _onRouterEvent = ( event:RoutesRecognized ) => {
+        console.log("[AppRouter._onRouterEvent] event:", event);
+
+        let albumId:number = this._parseUrl( event.url );
+
+        if( albumId < 0 ) {
+            if( this._appModel.currentAlbum() )
+                this._appModel.setCurrentAlbum( null );
+            return;
+        }
+
+        let nextAlbum:Album = this._appModel.getAlbum( albumId );
+
+        if( nextAlbum != this._appModel.currentAlbum() )
+            this._appModel.setCurrentAlbum( nextAlbum );
+
+        this._fetchAlbumData( nextAlbum );
+    };
 
     private _parseUrl( url:string ):number {
       console.log("[AppRouter._parseUrl] url:", url);
@@ -108,7 +134,7 @@ export class AppRouter {
             this._service.get<User>( id, User )
                          .subscribe(
           				          ( user:User ) => this._appModel.setCurrentUser( user ),
-          				          this._onError
+          				          this._appModel.setError
                          );
         }
         else
@@ -127,32 +153,8 @@ export class AppRouter {
             this._service.list<Photo>( Photo, `?albumId=${albumId}` )
                          .subscribe(
                              ( photos:Photo[] ) => this._appModel.setPhotos( photos ),
-                             this._onError
+                             this._appModel.setError
                          );
         }
     }
-
-    private _onRouterEvent = ( event:RoutesRecognized ) => {
-        console.log("[AppRouter._onRouterEvent] event:", event);
-
-        let albumId:number = this._parseUrl( event.url );
-
-        if( albumId < 0 ) {
-            if( this._appModel.currentAlbum() )
-                this._appModel.setCurrentAlbum( null );
-            return;
-        }
-
-        let nextAlbum:Album = this._appModel.getAlbum( albumId );
-
-        if( nextAlbum != this._appModel.currentAlbum() )
-            this._appModel.setCurrentAlbum( nextAlbum );
-
-        this._fetchAlbumData( nextAlbum );
-    };
-
-    private _onError = ( error:any ) => {
-        console.error("[AppRouter.onError] error:", error);
-        this._errorMsg = error;
-    };
 }

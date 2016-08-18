@@ -1,6 +1,6 @@
 import './rxjs-extensions';
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppModel, Album, User, Photo } from './app.model';
 import { AppRouter } from './app.routing';
 import { FluidComponent } from './fluid.component';
@@ -38,13 +38,18 @@ import { FluidComponent } from './fluid.component';
         </div>
     `
 })
-export class AppComponent extends FluidComponent {
+export class AppComponent extends FluidComponent implements OnInit{
 
     private _errorMsg:string = null;
 
     constructor( private _appRouter:AppRouter, private _appModel:AppModel ){
         super();
         console.log("[AppComponent.constructor]");
+    }
+
+    ngOnInit(){
+       console.log("[AppComponent.ngOnInit]");
+       this._appModel.error$.subscribe( error => this._errorMsg = error.toString() );
     }
 
     /**

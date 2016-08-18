@@ -24,12 +24,41 @@ import { AppModel, Album } from './app.model';
       </div>
     `
 })
+/**
+ * A selectable list of Albums that scrolls vertically.
+ * - Only 1 Album can be selected at a time
+ * - Items are togglable which means that if you click a selected item it will DESELECT it
+ * - Items can also be toggled if the selectedAlbum is set and is present on the list
+ */
 export class AlbumListComponent implements OnInit, OnDestroy {
 
+  /**
+   * Flag that indicates that this component should use AppModel.
+   * If true, it subscribe and updates relevant AppModel properties.
+   * @type {boolean}
+   * @Input
+   */
     @Input()  useAppModel:boolean = false;
+
+    /**
+     * A list of Albums to be displayed.
+     * Can be injected via @Input or binded to AppModel.
+     * @type {Album[]}
+     */
     @Input()  albums: Album[] = null;
+
+    /**
+     * The selected Album. If it's present on the list, it is toggled ON.
+     * Can be injected via @Input or binded to AppModel.
+     * @type {Album}
+     */
     @Input()  selectedAlbum: Album = null;
-    @Output() onSelected:EventEmitter<any[]> = new EventEmitter<any[]>();
+
+    /**
+     * Observable event emitter. It fires a message everytime selectedAlbum changes.
+     * @type {EventEmitter<Album>}
+     */
+    @Output() onSelected:EventEmitter<Album> = new EventEmitter<Album>();
 
     private _albumsSub:Subscription = null;
     private _albumSub:Subscription = null;
@@ -54,11 +83,15 @@ export class AlbumListComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         console.log("[AlbumListComponent.ngOnDestroy]");
-        if( this._albumsSub )
+        if( this._albumsSub ) {
             this._albumsSub.unsubscribe();
+            this._albumsSub = null;
+        }
 
-        if( this._albumSub )
+        if( this._albumSub ) {
             this._albumSub.unsubscribe();
+            this._albumSub = null;
+        }
 
         this.albums = null;
         this.selectedAlbum = null;
@@ -78,7 +111,7 @@ export class AlbumListComponent implements OnInit, OnDestroy {
         this.onSelected.emit( this.selectedAlbum );
     }
 
-    private _onSelect(album: Album, event: any) {
+    private _onSelect( album: Album, event: any ) {
         console.log("[AlbumListComponent._onSelect] album:", album);
         // Don't allow link click to navigate
         event.preventDefault();

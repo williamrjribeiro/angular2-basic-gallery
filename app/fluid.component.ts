@@ -1,7 +1,16 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
+/**
+ * A base class for @Components. Determines which Bootstrap 4 Container class
+ * to use based on browser width.
+ */
 export class FluidComponent {
+    /**
+     * If document.body.clientWidth greater than 767px, value is 'container'
+     * else less than 767px value is 'container-fluid' so it can take all horizontal space.
+     * @type {String}
+     */
     fluidClass = 'container';
 
     constructor(){
@@ -11,14 +20,6 @@ export class FluidComponent {
 
     private onResize(){
         console.log("[FluidComponent._onResize] document.body.clientWidth:", document.body.clientWidth);
-
-        let isFluid:boolean = this.fluidClass.indexOf('container-fluid') >= 0;
-
-        if( document.body.clientWidth > 768 ){
-            this.fluidClass = 'container';
-        }
-        else {
-            this.fluidClass = 'container-fluid';
-        }
+        this.fluidClass = (document.body.clientWidth > 767 ? 'container' : 'container-fluid' );
     }
 }

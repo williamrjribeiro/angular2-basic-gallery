@@ -10,7 +10,7 @@ import { FluidComponent } from './fluid.component';
 import { AlbumListComponent } from './album-list.component';
 import { MediaGridComponent } from './media-grid.component';
 import { UserInfoComponent } from './user-info.component';
-import { PhotoComponent } from './photo.component';
+import { PhotoModalComponent } from './photo.component';
 import { AlbumComponent } from './album.component';
 import { AboutComponent } from './about.component';
 import { AppComponent } from './app.component';
@@ -28,7 +28,7 @@ import { AppRouter, routing } from './app.routing';
       AlbumListComponent
     , MediaGridComponent
     , UserInfoComponent
-    , PhotoComponent
+    , PhotoModalComponent
     , AlbumComponent
     , AboutComponent
     , AppComponent
