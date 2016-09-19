@@ -11,8 +11,8 @@ import { Component } from '@angular/core';
           <h5 class="lead">Created by William R. J. Ribeiro - <a href="http://wwww.twitter.com/bill_bsb" target="_blank">@bill_bsb</a></h5>
           <p>Using:</p>
           <ul>
-            <li>Angular 2.0.0-RC.5</li>
-            <li>Bootstrap 4.0.0-Alpha.3</li>
+            <li>Angular 2.0.0</li>
+            <li>Bootstrap 4.0.0-Alpha.4</li>
             <li>SystemJS</li>
             <li>Gulp</li>
           </ul>
