@@ -12,7 +12,7 @@ import { PhotoModalComponent } from './photo.component';
     selector: 'album',
     template: `
       <photo-modal [photo]="_currentPhoto"></photo-modal>
-      <div class="{{fluidClass}} height-100-md" (window:resize)="onResize()">
+      <div class="{{fluidClass}} height-100-md" (window:resize)="_onResize()">
          <div class="row">
            <user-info [useAppModel]="true"></user-info>
          </div>
@@ -26,7 +26,7 @@ import { PhotoModalComponent } from './photo.component';
 })
 export class AlbumComponent extends FluidComponent implements OnInit, OnDestroy  {
 
-    private _currentPhoto:Photo = null;
+    _currentPhoto:Photo = null;
 
     constructor(){
         super();
@@ -41,7 +41,7 @@ export class AlbumComponent extends FluidComponent implements OnInit, OnDestroy 
         console.log("[AlbumComponent.ngOnDestroy]");
     }
 
-    private _onPhotoSelected( photo:Photo ){
+    _onPhotoSelected( photo:Photo ){
         console.log("[AlbumComponent._onPhotoSelected] photo:", photo);
         this._currentPhoto = photo;
 

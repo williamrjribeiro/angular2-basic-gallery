@@ -3,8 +3,11 @@
 /// <reference path="../typings/index.d.ts" />
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+//import { platformBrowser } from '@angular/platform-browser';
 
 import { AppModule } from './app.module';
+//import { AppModuleNgFactory } from '../aot/app/app.module.ngfactory';
 
 // Bootstrapping isn't core because there isn't a single way to bootstrap the app
 platformBrowserDynamic().bootstrapModule(AppModule);
+//platformBrowser().bootstrapModuleFactory(AppModuleNgFactory);

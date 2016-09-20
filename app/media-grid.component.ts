@@ -8,7 +8,7 @@ import { FluidComponent } from './fluid.component';
 @Component({
     selector: 'media-grid',
     template: `
-    <div class="{{fluidClass}} height-100-md" (window:resize)="onResize()">
+    <div class="{{fluidClass}} height-100-md" (window:resize)="_onResize()">
       <h6 *ngIf="!photos">fetching Album Photos...</h6>
       <div *ngIf="photos" class="row height-100-md scroll-list">
         <div *ngFor="let photo of photos"

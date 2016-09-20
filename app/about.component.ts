@@ -20,7 +20,7 @@ import { Component } from '@angular/core';
     `
 })
 export class AboutComponent {
-    private _title = 'About';
+    _title = 'About';
 
     constructor(){
         console.log("[AboutComponent.constructor]");

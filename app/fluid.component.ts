@@ -15,10 +15,10 @@ export class FluidComponent {
 
     constructor(){
         console.log("[FluidComponent.constructor]");
-        this.onResize();
+        this._onResize();
     }
 
-    private onResize(){
+    _onResize(){
         console.log("[FluidComponent._onResize] document.body.clientWidth:", document.body.clientWidth);
         this.fluidClass = (document.body.clientWidth > 767 ? 'container' : 'container-fluid' );
     }

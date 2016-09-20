@@ -63,3 +63,14 @@ You just need NodeJS and Gulp installed. From terminal on the root source folder
 
 
 Open browser on localhost:8000
+
+Distribution
+------------
+The app can benefit of the Ahead-of-Time Compilation! 
+`node_modules/.bin/ngc -p tsconfig.aot.json`
+
+`node_modules/.bin/rollup -c rollup.js`
+
+`gulp dist`
+
+Open browser on localhost:8000

@@ -16,7 +16,7 @@ import { FluidComponent } from './fluid.component';
     // RouterOutlet is one of the directives provided by the RouterModule.
     // The router displays each component immediately below the <router-outlet> as we navigate through the application
     template: `
-        <div class="{{fluidClass}} height-100-md" (window:resize)="onResize()">
+        <div class="{{fluidClass}} height-100-md" (window:resize)="_onResize()">
           <h1>Angular2 Gallery</h1>
           <div *ngIf="_errorMsg" class="row">
               <div class="col-sm-12">
@@ -40,7 +40,7 @@ import { FluidComponent } from './fluid.component';
 })
 export class AppComponent extends FluidComponent implements OnInit{
 
-    private _errorMsg:string = null;
+    _errorMsg:string = null;
 
     constructor( private _appRouter:AppRouter, private _appModel:AppModel ){
         super();
@@ -57,7 +57,7 @@ export class AppComponent extends FluidComponent implements OnInit{
      * It tells the AppRouter to navigate to the selected Album (but it can be null!)
      * @param  {Album}  album The selected Album from AlbumListComponent.
      */
-    private _onAlbumSelected( album:Album ) {
+    _onAlbumSelected( album:Album ) {
         console.log("[AppComponent._onAlbumSelected] album:", album);
         this._appRouter.navigate( album );
     }

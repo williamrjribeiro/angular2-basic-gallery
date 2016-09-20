@@ -1,5 +1,9 @@
 node_modules
 built/app
 built/libs
+dist/libs
+dist/build.js
+dist/styles.css
+aot
 typings
 npm-debug.log
